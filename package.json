@@ -1,0 +1,11 @@
+{
+  "name": "python",
+  "version": "1.0.0",
+  "description": "Code Louisville Python, May 2020 Project",
+  "main": "index.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lone-do",
+  "license": "ISC"
+}
