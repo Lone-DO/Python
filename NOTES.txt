@@ -1,0 +1,73 @@
+Created Reddit Console Client
+
+-help
+    default = "https://www.reddit.com/r/popular"
+    url = f"{default}{options.call}.json"
+    sort = [hot, new, top, rising]
+    t = [hour | day | week | month | year | all]
+    geo_filter = [
+        GLOBAL, // Everywhere
+        US, // United States
+        AR, // Argentina
+        AU, // Australia
+        BG, // Bulgaria
+        CA, // Canada
+        CL, // Chile
+        CO, // Columbia
+        HR, // Croatia
+        CZ, // Czech Republic
+        FL, // Finland
+        GR, // Greece
+        HU, // Hungary
+        IS, // Iceland
+        IN, // India
+        IE, // Ireland
+        JP, // Japan
+        MY, // Malaysia
+        MX, // Mexico
+        NZ, // New Zealond
+        PH, // Philippines
+        PL, // Poland
+        PT, // Portgal
+        PR, // Puerto Rico
+        RO, // Romania
+        RS, // Servia
+        SG, // Singapore
+        SE, // Sweden
+        TW, // Taiwan
+        TH, // Thailand
+        TR, // Turkey
+        UK, // United Kingdom
+    ]
+
+    options = {
+        after: "",
+        t: "",
+        geo_filter = "";
+        call: ""
+    }
+
+    // Loop through options, if any are set, append to call
+    for attr, value in options.__dict__.items():
+        print(attr, value)
+
+Master Loop
+    Begin App
+    Await user input.ToLower() = "quit", "q", "exit"
+    Else use input as Client Commands
+Initialize default Popular Content
+    // Ex. https://www.reddit.com/r/popular.json
+
+    List [Home | ""]
+        Pages = []
+        Fetch Default // https://www.reddit.com/r/popular.json
+    List Next
+        Append Last child id to query string
+            // Ex. ...?after=t3_gwwokl
+            /// https://www.reddit.com/r/popular.json?after=t3_gwwokl
+            // Page.Current = data[data.length -1].name
+            // Pages.push(Page.Current)
+    List Previous
+        Append Child by -1 from current child
+            // Ex. Pages[ "t3_gx3nwq","t3_gx2sb0","t3_gwyh1j","t3_gwwokl"]
+            // Page.Previoous Previous = CurrentChild < 0? Pages[0] : Pages[CurrentChild -1]
