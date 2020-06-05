@@ -50,6 +50,8 @@ Created Reddit Console Client
     // Loop through options, if any are set, append to call
     for attr, value in options.__dict__.items():
         print(attr, value)
+        if (options[attr] && attr != "call")
+            options.call += f"?{value}"
 
 Master Loop
     Begin App
