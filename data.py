@@ -1,59 +1,90 @@
-content = {
-    "default": "https:# www.reddit.com/r/popular",
-    
-    "sort" : "", #[hot, new, top, rising]
-    "t" : "", # [hour | day | week | month | year | all]
-    "geo_filter" : [
-        "GLOBAL", # Everywhere
-        "US", #  United States
-        "AR", #  Argentina
-        "AU", #  Australia
-        "BG", #  Bulgaria
-        "CA", #  Canada
-        "CL", #  Chile
-        "CO", #  Columbia
-        "HR", #  Croatia
-        "CZ", #  Czech Republic
-        "FL", #  Finland
-        "GR", #  Greece
-        "HU", #  Hungary
-        "IS", #  Iceland
-        "IN", #  India
-        "IE", #  Ireland
-        "JP", #  Japan
-        "MY", #  Malaysia
-        "MX", #  Mexico
-        "NZ", #  New Zealond
-        "PH", #  Philippines
-        "PL", #  Poland
-        "PT", #  Portgal
-        "PR", #  Puerto Rico
-        "RO", #  Romania
-        "RS", #  Servia
-        "SG", #  Singapore
-        "SE", #  Sweden
-        "TW", #  Taiwan
-        "TH", #  Thailand
-        "TR", #  Turkey
-        "UK", #  United Kingdom
-    ],
+import requests
+Sorts = ["top", "new", "rising", "top"]
+Time = ['hour', 'day', 'week', 'month', 'year', 'all']
+Geo_filters = [
+    "GLOBAL",  # Everywhere
+    "US",  # United States
+    "AR",  # Argentina
+    "AU",  # Australia
+    "BG",  # Bulgaria
+    "CA",  # Canada
+    "CL",  # Chile
+    "CO",  # Columbia
+    "HR",  # Croatia
+    "CZ",  # Czech Republic
+    "FL",  # Finland
+    "GR",  # Greece
+    "HU",  # Hungary
+    "IS",  # Iceland
+    "IN",  # India
+    "IE",  # Ireland
+    "JP",  # Japan
+    "MY",  # Malaysia
+    "MX",  # Mexico
+    "NZ",  # New Zealond
+    "PH",  # Philippines
+    "PL",  # Poland
+    "PT",  # Portgal
+    "PR",  # Puerto Rico
+    "RO",  # Romania
+    "RS",  # Servia
+    "SG",  # Singapore
+    "SE",  # Sweden
+    "TW",  # Taiwan
+    "TH",  # Thailand
+    "TR",  # Turkey
+    "UK",  # United Kingdom
+]
 
-    "options" : {
-        "after": "t3",
+
+class client:
+    _channel = "popular"
+    _default = f"https://www.reddit.com/r/{_channel}"
+    Sort = ""
+    Url = ""
+
+    Options = {
+        "after": "",
         "t": "",
-        "geo_filter": "US",
+        "geo_filter": "",
         "call": ""
-    },
-    "url" : "",
-}
+    }
+
+    def __init__(self, channel="popular"):
+        self._channel = channel
+
+    def setSort(self, sort):
+        if sort in Sorts:
+            self.Sort = sort
+
+    def setFilter(self, filter):
+        if filter.upper() in Geo_filters:
+            self.Options["geo_filter"] = filter
+
+    def setTime(self, t):
+        if t.lower() in Time:
+            self.Options["t"] = t
+
+    def setAfter(self, after):
+        self.Options["after"] = after
+        print(after)
+
+    def setFetch(self):
+        for attr, value in self.Options.items():
+            if (self.Options[attr] and attr != "call"):
+                self.Options['call'] += f"?{attr}={value}"
+        self.Url = f"{self._default}{self.Sort}.json{self.Options['call']}"
+
+    def fetch(self):
+        print("Fetching Data...")
+        self.setFetch()
+        head = {
+            'User-agent': "console:https://github.com/Lone-DO/Python:v0.0.5 (by u/lone-do)"
+        }
+        res = requests.get(self.Url, headers=head).json()
+        print("Complete...")
+        print(res)
 
 
-
-content["url"] = f"{content['default']}{content['options']['call']}.json"
-print(content['url'])
-
-#  Loop through options, if any are set, append to call
-# for attr, value in content['options'].__dict__.items():
-#     print(attr, value)
-#     if (content.options[attr] and attr != "call"):
-#         content.options.call += f"?{value}"
+reddit = client()
+reddit.fetch()
