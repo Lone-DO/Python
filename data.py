@@ -1,6 +1,15 @@
 import requests
+import json
+
+# read file
+with open('mockdata.json', 'r') as mock:
+    data=mock.read()
+
+# parse file
+obj = json.loads(data)
 Sorts = ["top", "new", "rising", "top"]
-Time = ['hour', 'day', 'week', 'month', 'year', 'all']
+Times = ['hour', 'day', 'week', 'month', 'year', 'all']
+
 Geo_filters = [
     "GLOBAL",  # Everywhere
     "US",  # United States
@@ -42,7 +51,7 @@ class client:
     _default = f"https://www.reddit.com/r/{_channel}"
     Sort = ""
     Url = ""
-
+    data = obj
     Options = {
         "after": "",
         "t": "",
@@ -62,29 +71,41 @@ class client:
             self.Options["geo_filter"] = filter
 
     def setTime(self, t):
-        if t.lower() in Time:
+        if t.lower() in Times:
             self.Options["t"] = t
 
     def setAfter(self, after):
-        self.Options["after"] = after
-        print(after)
+        self.Options["after"] = after # Data.Data.After
 
     def setFetch(self):
         for attr, value in self.Options.items():
-            if (self.Options[attr] and attr != "call"):
-                self.Options['call'] += f"?{attr}={value}"
+            if (self.Options[attr] and attr != "call"): self.Options['call'] += f"?{attr}={value}"
         self.Url = f"{self._default}{self.Sort}.json{self.Options['call']}"
 
+    def reset(self):
+        for attr, value in self.Options.items():
+            if (value != ""): self.Options[attr] = ""
+        self.fetch()
+        
     def fetch(self):
-        print("Fetching Data...")
+        print("Loading Data...")
         self.setFetch()
         head = {
             'User-agent': "console:https://github.com/Lone-DO/Python:v0.0.5 (by u/lone-do)"
         }
-        res = requests.get(self.Url, headers=head).json()
+        # res = requests.get(self.Url, headers=head).json()
+        res = requests.get(mock)
         print("Complete...")
-        print(res)
+        self.data = res['data']['children']
+        print(self.data)
 
-
-reddit = client()
-reddit.fetch()
+    def Settings(self):
+        self.setFetch()
+        print(f"""Settings
+        Channel: r/{self._channel}
+        Fetching from: {self.Url}
+        Sort: {self.Sort}
+        Loading content after: {self.Options['after']}
+        Posted within the last: {self.Options['t']}
+        Content Region: {self.Options["geo_filter"]}
+        """)
