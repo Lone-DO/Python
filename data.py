@@ -3,7 +3,7 @@ import json
 
 # read file
 with open('mockdata.json', 'r') as mock:
-    data=mock.read()
+    data = mock.read()
 
 # parse file
 obj = json.loads(data)
@@ -47,16 +47,20 @@ Geo_filters = [
 
 
 class client:
-    _channel = "popular"
-    _default = f"https://www.reddit.com/r/{_channel}"
+    _channel = "r/popular"
+    _default = f"https://www.reddit.com/{_channel}"
     Sort = ""
     Url = ""
-    data = obj
+    data = {}
+    comments = {}
     Options = {
         "after": "",
         "t": "",
         "geo_filter": "",
         "call": ""
+    }
+    head = {
+        'User-agent': "console:https://github.com/Lone-DO/Python:v0.0.5 (by u/lone-do)"
     }
 
     def __init__(self, channel="popular"):
@@ -75,29 +79,36 @@ class client:
             self.Options["t"] = t
 
     def setAfter(self, after):
-        self.Options["after"] = after # Data.Data.After
+        self.Options["after"] = after  # Data.Data.After
 
     def setFetch(self):
         for attr, value in self.Options.items():
-            if (self.Options[attr] and attr != "call"): self.Options['call'] += f"?{attr}={value}"
+            if (self.Options[attr] and attr != "call"):
+                self.Options['call'] += f"?{attr}={value}"
         self.Url = f"{self._default}{self.Sort}.json{self.Options['call']}"
 
     def reset(self):
         for attr, value in self.Options.items():
-            if (value != ""): self.Options[attr] = ""
+            if (value != ""):
+                self.Options[attr] = ""
         self.fetch()
-        
+
     def fetch(self):
         print("Loading Data...")
         self.setFetch()
-        head = {
-            'User-agent': "console:https://github.com/Lone-DO/Python:v0.0.5 (by u/lone-do)"
-        }
-        # res = requests.get(self.Url, headers=head).json()
-        res = requests.get(mock)
+
+        res = requests.get(self.Url, headers=self.head).json()
+        # res = requests.get(mock)
         print("Complete...")
-        self.data = res['data']['children']
-        print(self.data)
+        self.data = res
+        # self.data = res['data']['children']
+
+    def fetchComments(self, link):
+        Url = f"https://www.reddit.com/{link}.json"
+        print("Loading Post...")
+        res = requests.get(Url, headers=self.head).json()
+        print("...Complete")
+        self.comments = res
 
     def Settings(self):
         self.setFetch()
