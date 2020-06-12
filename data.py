@@ -55,12 +55,13 @@ class client:
     comments = {}
     Options = {
         "after": "",
+        "before": "",
         "t": "",
         "geo_filter": "",
         "call": ""
     }
     head = {
-        'User-agent': "console:https://github.com/Lone-DO/Python:v0.0.5 (by u/lone-do)"
+        'User-agent': "console:https://github.com/Lone-DO/Python:v0.0.6 (by u/lone-do)"
     }
 
     def __init__(self, channel="popular"):
@@ -80,6 +81,11 @@ class client:
 
     def setAfter(self, after):
         self.Options["after"] = after  # Data.Data.After
+        self.Options['before'] = ""
+
+    def setBefore(self, before):
+        self.Options['before'] = before
+        self.Options["after"] = ""
 
     def setFetch(self):
         for attr, value in self.Options.items():
