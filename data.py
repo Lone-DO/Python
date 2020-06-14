@@ -130,7 +130,7 @@ class client:
 
     def fetchComments(self, link):
         Url = f"https://www.reddit.com/{link}.json"
-        print("Loading Post...")
+        print(f"Loading Post from... {Url}")
         res = requests.get(Url, headers=self.head).json()
         print("...Complete")
         self.comments = res
