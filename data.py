@@ -2,11 +2,11 @@ import requests
 import json
 
 # read file
-with open('mockdata.json', 'r') as mock:
-    data = mock.read()
+# with open('mockdata.json', 'r') as mock:
+#     data = mock.read()
 
 # parse file
-obj = json.loads(data)
+# obj = json.loads(data)
 
 
 class client:
@@ -75,6 +75,8 @@ class client:
 
     def setChannel(self, channel):
         print(f"Changing Channel to {channel}")
+        self.Options['after'] = ""
+        self.Options["before"] = ""
         if channel[slice(2)] == "r/":
             self._channel = f"{channel}"
         else:
@@ -111,7 +113,7 @@ class client:
                 self.Options['call'] += f"?{attr}={value}"
         self.Url = f"{self._default}{self._channel}{self.Sort}.json{self.Options['call']}"
 
-    def reset(self):
+    def reset(self, *args):
         self.setChannel("popular")
         for attr, value in self.Options.items():
             if (value != ""):
@@ -129,7 +131,7 @@ class client:
         # self.data = res['data']['children']
 
     def fetchComments(self, link):
-        Url = f"https://www.reddit.com/{link}.json"
+        Url = f"https://www.reddit.com{link}.json"
         print(f"Loading Post from... {Url}")
         res = requests.get(Url, headers=self.head).json()
         print("...Complete")
@@ -138,7 +140,7 @@ class client:
     def Settings(self):
         self.setFetch()
         print(f"""Settings
-        Channel: r/{self._channel}
+        Channel: {self._channel}
         Fetching from: {self.Url}
         Sort: {self.Sort}
         Loading content after: {self.Options['after']}

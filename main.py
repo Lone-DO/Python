@@ -1,12 +1,14 @@
-import data
-from Display import Display
+import Data
+import Display
 
-reddit = data.client()
+reddit = Data.client()
+View = Display.Display()
 
 
 def start():
     reddit.fetch()
-    Display('page', reddit.data)
+    View.setData(reddit.data)
+    View.getList()
 
 
 start()
@@ -74,7 +76,7 @@ while True:
                 "next", "more", loads next page
                 """)
         else:
-            Display('page', reddit.data)
+            View.show('page', reddit.data)
     # List Commands
     if (isList):
         if (hasArgs and args[1].lower() in help):
@@ -97,13 +99,13 @@ while True:
                     f"{args[1]} Invalid List Argument, use 'list -h' for help")
                 continue
 
-            if index < len(Display.list):
-                reddit.fetchComments(Display.list[index])
-                Display('post', reddit.comments)
-            elif index >= len(Display.list):
+            if index < len(View.list):
+                reddit.fetchComments(View.list[index])
+                View.show('post', reddit.comments)
+            elif index >= len(View.list):
                 print("Page Unavailable, Please try again")
         else:
-            print(Display.list)
+            print(View.list)
     # Change Setting Commands
     if (isChange):
         if (len(args) == 1):

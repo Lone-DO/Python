@@ -2,65 +2,71 @@ from ConvertTime import ConvertTime
 
 
 class Display:
+    data = []
     list = []
 
-    index = 0
+    def setData(self, data):
+        self.data = data
+        self.show("page", self.data)
 
-    def __init__(self, call, data):
-        if call == 'page':
-            children = data["data"]["children"]
-            for child in children:
-                data = child.get("data")
-                Name = data.get("name")  # Pass Last child to Pages Array
-                Title = data.get("title")
-                Author = data.get("author")
-                # ID = data.get("id")
-                # Url =  data.get("url")
-                Link = data.get("permalink")
-                Created = data.get("created")
-                # Thumbnail =  data.get("title")
-                Score = data.get("score")
-                numComments = data.get("num_comments")
-                Domain = data.get("domain")
-                Prefix = data.get("subreddit_name_prefixed")
-                if Name is not None:
-                    Body = f"""
-                    [{self.index}] {Title} ({Domain})
+    def setList(self, data):
+        self.list = data
+        print(self.list)
+
+    def getList(self):
+        return self.list
+
+    def loop(self, call, data):
+        items = []
+        for index, child in enumerate(data, 0):
+            data = child.get("data")
+            Name = data.get("name")  # Pass Last child to Pages Array
+            Title = data.get("title")
+            Author = data.get("author")
+            # ID = data.get("id")
+            # Url = data.get("url")
+            Link = data.get("permalink")
+            Created = data.get("created")
+            # Thumbnail =  data.get("title")
+            Score = data.get("score")
+            numComments = data.get("num_comments")
+            Domain = data.get("domain")
+            Prefix = data.get("subreddit_name_prefixed")
+            Name = data.get("name")
+            Title = data.get("title")
+            Text = data.get("selftext")
+
+            if Name is not None:
+                if call == "posts":
+                    # if self.getList() and index == 0:
+                    #     self.list = []
+                    #     print(f"Clearing list, {self.list}")
+
+                    print(f"""
+                    [{index}] {Title} ({Domain})
                     submitted {ConvertTime(Created)} by u/{Author} to {Prefix}
                     {Score} upvotes with {self.CommentCount(numComments)} comments
-                    """
-                    print(Body)
+                    Link: {Link}
+                    """)
+                    items.append(Link)
+                if call == "post":
+                    print("Loading post")
+                    print(f"""
+                    Title: {Title}
+                    Text: {Text}
+                """)
+                if call == "comments":
+                    print("Rendering Comments")
+        return items
 
-                    self.list.append(Link)
-                    self.index += 1
+    def show(self, call, data):
+        if call == 'page':
+            children = data["data"]["children"]
+            self.setList(self.loop('posts', children))
+
         elif (call == "post"):
-            print("Load Comments")
-            children = data[1]["data"]["children"]
-            for child in children:
-                data = child.get("data")
-                Name = data.get("name")  # Pass Last child to Pages Array
-                print(Name)
-                # Title = data.get("title")
-                # Author = data.get("author")
-                # ID = data.get("id")
-                # # Url =  data.get("url")
-                # Link = data.get("permalink")
-                # Created = data.get("created")
-                # # Thumbnail =  data.get("title")
-                # Score = data.get("score")
-                # numComments = data.get("num_comments")
-                # Domain = data.get("domain")
-                # Prefix = data.get("subreddit_name_prefixed")
-                # if Name is not None:
-                #     Body = f"""
-                #     [{self.index}] {Title} ({Domain})
-                #     submitted {ConvertTime(Created)} by u/{Author} to {Prefix}
-                #     {Score} upvotes with {self.CommentCount(numComments)} comments
-                #     """
-                #     print(Body)
-
-                # self.list.append(Link)
-                # self.index += 1
+            children = data[0]["data"]["children"]
+            self.loop('post', children)
 
     def CommentCount(self, integer):
         if integer <= 0:
