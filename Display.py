@@ -1,5 +1,5 @@
 from ConvertTime import ConvertTime
-
+from tqdm import tqdm
 
 class Display:
     data = []
@@ -11,14 +11,14 @@ class Display:
 
     def setList(self, data):
         self.list = data
-        print(self.list)
+        # print(self.list)
 
     def getList(self):
         return self.list
 
     def loop(self, call, data):
         items = []
-        for index, child in enumerate(data, 0):
+        for index, child in tqdm(enumerate(data, 0), total=len(data)):
             data = child.get("data")
             Name = data.get("name")  # Pass Last child to Pages Array
             Title = data.get("title")
@@ -50,7 +50,7 @@ class Display:
                     """)
                     items.append(Link)
                 if call == "post":
-                    print("Loading post")
+                    # print("Loading post")
                     print(f"""
                     Title: {Title}
                     Text: {Text}

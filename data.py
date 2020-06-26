@@ -121,12 +121,12 @@ class client:
         self.fetch()
 
     def fetch(self):
-        print("Loading Data...")
+        # print("Loading Data...")
         self.setFetch()
         print(self.Url)
         res = requests.get(self.Url, headers=self.head).json()
         # res = requests.get(mock)
-        print("Complete...")
+        # print("Complete...")
         self.data = res
         # self.data = res['data']['children']
 
