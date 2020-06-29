@@ -9,6 +9,20 @@ Code Louisville Project, Python, May 2020
    python main
  ```
  - This is a Python Console Application, Enjoy
+ - Input --help for a list of instructions/ options
+ ```
+ --help
+ 
+ #returns the following
+ The following commands are available,
+    "help", "-help", "--help", "-h", "--h" to list options
+    "Load", [optional args: 'prev', 'next']
+    "List", [optional args: 'array/ post #]
+    "Settings", to browse settings/ current parameters
+    "Change" (setting), [arg: "Channel", "Sort", "time", "region"]
+    "Refresh", to reload content (call after changing a setting)
+    "Reset", restarts application with default settings
+ ```
  
 ## Create Reddit Console Client App - Browse Reddit (Text Only)
 
@@ -18,7 +32,7 @@ Simple consolse interface for browsing reddit, utilizing the same Reddit UI Hier
 
 - Implement a “master loop” console application where the user can repeatedly enter commands/perform actions, including choosing to exit the program
    > [main.py](https://github.com/Lone-DO/Python/blob/master/main.py) => Client will run until user input is a exit statement
-   ```
+   ```python
    main.py
    ...
    if args[0] in ["q", "quit", "exit", "terminate", "close"]:
@@ -50,7 +64,15 @@ Simple consolse interface for browsing reddit, utilizing the same Reddit UI Hier
       -  [x] Sort method to sort Articles based on user selection...
          > ["hot","new","rising","top"]
       -  [x] Load method to GET more Articles via last child's ID...
-             `data.data.children[Object.keys(data.data.children).length - 1].data.name;`
+         ```python
+            main.py
+            ...
+            # Return child via num/index
+            def getChild(num): return data[num].get("data")["name"]
+            ...
+            reddit.setAfter(getChild(len(data) - 1))
+            ...
+         ```
 -  [ ] Create Method to GET Article Comments
 
 ### Render data from Api
@@ -58,7 +80,7 @@ Simple consolse interface for browsing reddit, utilizing the same Reddit UI Hier
 -  [x] Create Model
 -  [x] Loop Data and replicate Model
    -  [x] Filter Data...
-   ```
+   ```python
    ...
    for index, child in tqdm(enumerate(data, 0), total=len(data)):
       data = child.get("data")
@@ -79,7 +101,7 @@ Simple consolse interface for browsing reddit, utilizing the same Reddit UI Hier
    -  [x] Call Model...
    -  [x] Set generated item to list items[]
    -  [x] Render body to console UI
-      ```
+      ```python
       print(f"""
         [{index}] {Title} ({Domain})
         submitted {ConvertTime(Created)} by u/{Author} to {Prefix}
