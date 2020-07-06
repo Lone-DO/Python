@@ -1,7 +1,7 @@
-import Data
+import data
 import Display
 
-reddit = Data.client()
+reddit = data.client()
 View = Display.Display()
 
 
